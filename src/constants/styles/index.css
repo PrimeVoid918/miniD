@@ -1,5 +1,19 @@
 @import url(./css-reset.css);
+@import url(./variables.css);
+@import url(./font.css);
 
 body {
-  background-color: rgb(29, 29, 29);
+  font-family: "IBM Plex Sans", sans-serif;
+  font-weight: 400;
+  /* background-color: var(--primary-d6); */
+  background-color: black;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 900;
 }
