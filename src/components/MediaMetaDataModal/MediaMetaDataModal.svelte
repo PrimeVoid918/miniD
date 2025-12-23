@@ -33,6 +33,10 @@
         <MediaMetaDataModalCloseButton {open} {onClose} />
       </div>
       <div class="contents">
+        <h1>{media?.title}</h1>
+        <h1>{media?.description}</h1>
+
+        <img src={media?.thumbnail} alt="" />
         <!-- <MediaMetaDataModalVideoFormat formats={} /> -->
       </div>
     </div>

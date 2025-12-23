@@ -4,6 +4,7 @@
   import UrlSearchBar from "../../components/UrlSearchBar/UrlSearchBar.svelte";
   import type { Media } from "../../lib/services/tuari-command/tuari-command.types";
 
+
   let media = $state<Media | undefined>();
 
   let isModalOpen = $state(false);
@@ -13,30 +14,28 @@
     console.log("pressed?, isModalOpen status: ", isModalOpen);
   }
 
-  async function getJsonMediaData() {
-    const res = await fetch("../../../notes/video-metadata.json");
-    media = await res.json();
+  // async function getJsonMediaData() {
+  //   const res = await fetch("../../../notes/video-metadata.json");
+  //   media = await res.json();
 
-    for (const format of media?.formats ?? []) {
-      if (format.video_ext === "mp4") {
-        // format.width;
-        // format.height;
-        console.log("format mp4: ", format);
-      }
-      if (format.kind === "audio") {
-        // audio-only
-      }
-    }
+  //   for (const format of media?.formats ?? []) {
+  //     if (format.video_ext === "mp4") {
+  //       // format.width;
+  //       // format.height;
+  //       console.log("format mp4: ", format);
+  //     }
+  //     if (format.kind === "audio") {
+  //       // audio-only
+  //     }
+  //   }
 
-    // console.log("media data: ", media);
-    // console.log("formats data: ", media?.formats);
-  }
+  //   // console.log("media data: ", media);
+  //   // console.log("formats data: ", media?.formats);
+  // }
 
-  getJsonMediaData();
+  // getJsonMediaData();
 
-  function simulateOpenModal() {
-    isModalOpen = true;
-  }
+  function simulateOpenModal() {}
 </script>
 
 <main>
@@ -45,7 +44,7 @@
     onclick={simulateOpenModal}>Simulate open Modal</button
   >
   <UrlSearchBar />
-  <MediaMetaDataModal {media} open={isModalOpen} onClose={onCloseModal} />
+  <!-- <MediaMetaDataModal {media} open={isModalOpen} onClose={onCloseModal} /> -->
   <DownloadedMediaTray />
   <h1>2</h1>
 </main>

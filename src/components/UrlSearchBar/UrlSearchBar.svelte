@@ -1,15 +1,28 @@
 <script lang="ts">
+  import MediaMetaDataModal from "../MediaMetaDataModal/MediaMetaDataModal.svelte";
+  import type { Media } from "../../lib/services/tuari-command/tuari-command.types";
+  import { invoke } from "@tauri-apps/api/core";
+
+  let media = $state<Media | undefined>();
+  let isModalOpen = $state(false);
+  function onCloseModal() {
+    isModalOpen = !isModalOpen;
+    console.log("pressed?, isModalOpen status: ", isModalOpen);
+  }
+
   let url = $state("");
 
-  function onpaste(e: ClipboardEvent) {
+  async function onpaste(e: ClipboardEvent) {
     const pastedData = e.clipboardData?.getData("text") ?? "";
 
     // Simple URL validation
     try {
       // const parsed = new URL(pastedData);
-      // url = parsed.href;
+      const data: any = await invoke("fetch_media", { url: pastedData });
       url = pastedData;
-      console.log("Valid URL pasted:", url);
+      media = data?.results;
+      console.log("media data now: ", media);
+      isModalOpen = true;
     } catch {
       console.log("Not a valid URL:", pastedData);
     }
@@ -33,6 +46,7 @@
     {onkeydown}
     {onpaste}
   />
+  <MediaMetaDataModal {media} open={isModalOpen} onClose={onCloseModal} />
 </div>
 
 <style>
