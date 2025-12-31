@@ -7,3 +7,9 @@ pub fn get_media(url: &str) -> Result<Media, AppError> {
   let media = Media::from_yt_dlp(&raw_json)?;
   Ok(media)
 }
+
+pub fn download(format_id: &str, url: &str) -> Result<Media, AppError> {
+  let raw_json = yt_dlp::YtDLPAdapter::download(url, format_id)?;
+  let media = Media::from_yt_dlp(&raw_json)?;
+  Ok(media)
+}

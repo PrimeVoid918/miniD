@@ -114,7 +114,7 @@
     border: 1px solid yellow;
     padding: var(--spacing-md);
 
-    > .filters {
+    & > .filters {
       display: flex;
       flex-direction: row;
       gap: var(--spacing-md);

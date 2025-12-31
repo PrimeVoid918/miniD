@@ -1,32 +1,32 @@
 <script lang="ts">
   import MediaMetaDataModal from "../MediaMetaDataModal/MediaMetaDataModal.svelte";
   import type { Media } from "../../lib/services/tuari-command/tuari-command.types";
-  import { invoke } from "@tauri-apps/api/core";
+  import { mediaState, mediaService } from "../../lib/stores/MediaService";
 
-  let media = $state<Media | undefined>();
+  let url = $state("");
+
+  // let dataFromUrl = $state<any>();
+  // const { fetchMedia } = mediaService;
+  let data = $state<Media>();
+  let isLoading = $state();
+  let error = $state();
+
   let isModalOpen = $state(false);
   function onCloseModal() {
     isModalOpen = !isModalOpen;
     console.log("pressed?, isModalOpen status: ", isModalOpen);
   }
 
-  let url = $state("");
-
   async function onpaste(e: ClipboardEvent) {
     const pastedData = e.clipboardData?.getData("text") ?? "";
 
     // Simple URL validation
-    try {
-      // const parsed = new URL(pastedData);
-      const data: any = await invoke("fetch_media", { url: pastedData });
-      url = pastedData;
-      media = data?.results;
-      console.log("media data now: ", media);
-      isModalOpen = true;
-    } catch {
-      console.log("Not a valid URL:", pastedData);
-    }
+    e.preventDefault();
+    const pastedUrl = e.clipboardData?.getData("text") ?? "";
+    data = await mediaService.fetchMedia(pastedUrl); // triggers updates in mediaState
+    isModalOpen = true;
 
+    console.log("data from url: ", data);
     e.preventDefault(); // optional, prevents default paste if needed
   }
 
@@ -46,7 +46,24 @@
     {onkeydown}
     {onpaste}
   />
-  <MediaMetaDataModal {media} open={isModalOpen} onClose={onCloseModal} />
+  {#if data}
+    <MediaMetaDataModal
+      media={data}
+      onClose={onCloseModal}
+      open={isModalOpen}
+    />
+  {/if}
+  <!-- {#if isLoading}
+    <p>Loading...</p>
+  {:else if error}
+    <p>Error: {error.message}</p>
+  {:else if data}
+    <MediaMetaDataModal
+      media={dataFromUrl}
+      onClose={onCloseModal}
+      open={isModalOpen}
+    />
+  {/if} -->
 </div>
 
 <style>

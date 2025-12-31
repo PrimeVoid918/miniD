@@ -109,6 +109,8 @@ section {
 *:before,
 *:after {
   box-sizing: border-box;
+  /* font-family: "Iosevka", sans-serif; */
+  /* font-weight: 400; */
 }
 
 /* Remove default list styles */

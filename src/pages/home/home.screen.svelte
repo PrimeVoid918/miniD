@@ -59,13 +59,13 @@
     /* border: 10px solid white; */
     position: relative;
 
-    > div {
+    /* > div {
       font-size: 3rem;
 
       > button {
         border: 1px solid white;
         color: white;
       }
-    }
+    } */
   }
 </style>

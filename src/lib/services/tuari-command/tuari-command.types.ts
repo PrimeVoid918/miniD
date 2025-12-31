@@ -15,14 +15,17 @@ export type BaseFormat = {
   url: string;
   ext: string;
   format: string;
+  formatId: string;
   filesize: number;
   protocol?: string;
   video_ext: string | null;
+  tbr: number;
   audio_ext: string | null;
 };
 
 export type VideoFormat = BaseFormat & {
   kind: "video";
+  fps: number;
   width: number;
   height: number;
 };

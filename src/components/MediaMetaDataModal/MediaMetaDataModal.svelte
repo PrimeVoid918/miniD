@@ -7,6 +7,13 @@
   //! get the close button color from the custom css color for dynamic purposes later!
 
   let { open, media, onClose }: MediaMetaDataModalProps = $props();
+  // let mediaState = $derived(media);
+
+  // reactively track changes
+  $effect(() => {
+    // mediaState = media;
+    // console.log("media passed to modal:", media);
+  });
 
   // Close on Escape key
   function handleKeydown(e: KeyboardEvent) {
@@ -26,21 +33,26 @@
 <svelte:window on:keydown={handleKeydown} />
 
 {#if open}
-  <section class="overlay">
-    <div class="container">
-      <div class="header">
-        <h1>Download Video</h1>
-        <MediaMetaDataModalCloseButton {open} {onClose} />
+  {#if media?.formats}
+    <section class="overlay">
+      <div class="container">
+        <div class="header">
+          <h1>Download Video</h1>
+          <MediaMetaDataModalCloseButton {open} {onClose} />
+        </div>
+        <div class="contents">
+          <div>
+            <img src={media?.thumbnail} alt="" />
+            <div>
+              <h3>{media?.title}</h3>
+              <p>{media?.description}</p>
+            </div>
+          </div>
+          <MediaMetaDataModalVideoFormat formats={media?.formats} />
+        </div>
       </div>
-      <div class="contents">
-        <h1>{media?.title}</h1>
-        <h1>{media?.description}</h1>
-
-        <img src={media?.thumbnail} alt="" />
-        <!-- <MediaMetaDataModalVideoFormat formats={} /> -->
-      </div>
-    </div>
-  </section>
+    </section>
+  {/if}
 {/if}
 
 <style>
@@ -58,6 +70,7 @@
 
     display: flex;
     justify-content: center;
+    align-items: center;
     padding: var(--spacing-lg);
 
     > .container {
@@ -65,7 +78,9 @@
 
       border-radius: var(--borderRadius-xl);
       width: clamp(300px, 90vw, 1000px);
-      max-height: 100%;
+      /* max-height: clamp(600px, 90%, 1000px); */
+      max-height: 90%;
+      height: 90%;
       overflow-y: auto;
 
       border: 1px solid greenyellow;
@@ -90,6 +105,22 @@
         padding: var(--spacing-lg);
         /* padding: clamp(1rem, 5vw, 3rem); */
         font-size: clamp(1rem, 2.5vw, 1.5rem);
+
+        > div {
+          display: flex;
+          flex-direction: row;
+          border: 1px solid var(--primary-l8);
+          > img {
+            height: 100px;
+            aspect-ratio: 16/9;
+          }
+          > div {
+            padding: var(--spacing-md);
+            > p {
+              font-size: var(--fontSize-sm);
+            }
+          }
+        }
       }
     }
   }

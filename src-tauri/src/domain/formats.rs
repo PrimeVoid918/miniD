@@ -30,6 +30,7 @@ pub struct BaseFormat {
   pub protocol: Option<String>,
   pub filesize: Option<u64>,
   pub filesize_approx: Option<u64>,
+  pub tbr: Option<f64>,
   pub video_ext: Option<String>,
   pub audio_ext: Option<String>,
 }

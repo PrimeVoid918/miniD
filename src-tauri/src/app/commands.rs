@@ -8,3 +8,9 @@ pub fn fetch_media(url: String) -> Result<AppResult<Media>, AppError> {
   let media = media_service::get_media(&url)?;
   Ok(AppResult::new(media, 1))
 }
+
+#[tauri::command]
+pub fn download_media(format_id: String, url: String) -> Result<AppResult<Media>, AppError> {
+  let media = media_service::get_media(&url)?;
+  Ok(AppResult::new(media, 1))
+}
