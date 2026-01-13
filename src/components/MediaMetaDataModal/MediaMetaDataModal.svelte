@@ -3,6 +3,7 @@
   import MediaMetaDataModalCloseButton from "./MediaMetaDataModalCloseButton.svelte";
   import MediaMetaDataModalVideoFormat from "./MediaMetaDataModalVideoFormat.svelte";
   import type { MediaMetaDataModalProps } from "./MediaMetaDataModal.types";
+  import ButtonGeneric from "../Buttons/AsyncButton.svelte";
 
   //! get the close button color from the custom css color for dynamic purposes later!
 
@@ -28,6 +29,22 @@
       onClose();
     }
   }
+
+  let dir_location = $state("/sample/downloads");
+
+  // async function handleDownload() {}
+  let selectedId = 3;
+  async function handleDownload() {
+    if (!selectedId) return false;
+
+    try {
+      // Call your Rust backend here
+      // await invoke("download", { id: selectedId });
+      return true; // The button will now show "Success" state
+    } catch (e) {
+      return false; // The button knows it failed
+    }
+  }
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
@@ -49,6 +66,14 @@
             </div>
           </div>
           <MediaMetaDataModalVideoFormat formats={media?.formats} />
+          <div class="download-section">
+            <!-- <ButtonGeneric onClick={handleDownload}
+              ><h2>Download</h2></ButtonGeneric
+            > -->
+            <div>
+              <input type="text" bind:value={dir_location} />
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -75,15 +100,15 @@
 
     > .container {
       background-color: var(--primary-d8);
-
       border-radius: var(--borderRadius-xl);
-      width: clamp(300px, 90vw, 1000px);
-      /* max-height: clamp(600px, 90%, 1000px); */
+      border: 1px solid greenyellow;
+
+      display: flex;
+      flex-direction: column;
       max-height: 90%;
       height: 90%;
-      overflow-y: auto;
-
-      border: 1px solid greenyellow;
+      width: clamp(300px, 90vw, 1000px);
+      overflow-y: hidden;
 
       > .header {
         display: flex;
@@ -101,10 +126,12 @@
       }
 
       > .contents {
-        /* Fluid padding or font-size example */
         padding: var(--spacing-lg);
-        /* padding: clamp(1rem, 5vw, 3rem); */
         font-size: clamp(1rem, 2.5vw, 1.5rem);
+        flex: 1;
+        display: flex;
+        min-height: 0;
+        flex-direction: column;
 
         > div {
           display: flex;
@@ -118,6 +145,17 @@
             padding: var(--spacing-md);
             > p {
               font-size: var(--fontSize-sm);
+            }
+          }
+        }
+
+        > .download-section {
+          margin-top: auto;
+
+          > div {
+            > input {
+              font-size: var(--fontSize-sm);
+              color: var(--text-d2);
             }
           }
         }

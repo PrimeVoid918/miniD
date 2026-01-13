@@ -117,4 +117,8 @@ impl Media {
       formats: formats,             // simplify for now
     })
   }
+
+  pub fn get_download_status(&self) -> Vec<MediaFormat> {
+    
+  }
 }

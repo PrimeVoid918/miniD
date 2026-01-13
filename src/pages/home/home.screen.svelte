@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Backdrop from "../../components/Backdrop/Backdrop.svelte";
   import DownloadedMediaTray from "../../components/DownloadedMediaTray/DownloadedMediaTray.svelte";
   import MediaMetaDataModal from "../../components/MediaMetaDataModal/MediaMetaDataModal.svelte";
   import UrlSearchBar from "../../components/UrlSearchBar/UrlSearchBar.svelte";
@@ -46,6 +47,7 @@
   <UrlSearchBar />
   <!-- <MediaMetaDataModal {media} open={isModalOpen} onClose={onCloseModal} /> -->
   <DownloadedMediaTray />
+  <Backdrop></Backdrop>
   <h1>2</h1>
 </main>
 

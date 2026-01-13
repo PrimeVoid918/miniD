@@ -15,7 +15,7 @@ export type BaseFormat = {
   url: string;
   ext: string;
   format: string;
-  formatId: string;
+  format_id: string;
   filesize: number;
   protocol?: string;
   video_ext: string | null;

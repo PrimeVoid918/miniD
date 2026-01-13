@@ -18,86 +18,109 @@
   );
 
   $effect(() => {
-    // console.log("videos: ", formats);
+    console.log("videos: ", videos);
     // console.log("videos: ", formatsProps);
   });
 
-  let selectedId = $state(0);
+  let selectedFormatId = $state<string | null>("");
+
+  function handleSelectedId(id: string) {
+    selectedFormatId = id;
+    console.log("selected id: ", id);
+  }
 </script>
 
 <section>
-  <h1>Video Format ay</h1>
+  <div>
+    <h1>Video Format ay</h1>
 
-  {#each videos as video, i}
-    {#if video.ext !== "mhtml"}
-      <div class="formats">
-        <div class="format-row">
-          <span>{video.width}</span>
-          <span>{video.ext}</span>
-          <span>{video.fps} FPS</span>
-          <span
-            >{mediaDisplayHelperService.getSizeConverter(video.filesize)}</span
+    {#each videos as video, i}
+      {#if video.ext !== "mhtml" && video.filesize > 0}
+        <div class="formats">
+          <button
+            class="format-row"
+            class:selected={selectedFormatId === video.format_id.toString()}
+            onclick={(e) => handleSelectedId(video.format_id.toString())}
           >
+            <span>{video.width}x{video.height}</span>
+            <span>{video.ext}</span>
+            <span>{video.fps} FPS</span>
+            <span
+              >{mediaDisplayHelperService.getSizeConverter(
+                video.filesize
+              )}</span
+            >
+          </button>
         </div>
-      </div>
-    {/if}
-  {/each}
+      {/if}
+    {/each}
 
-  <h1>Audio Format ay</h1>
-  {#each audios as audio, i}
-    <div class="formats">
-      <div class="format-row">
-        <span>{audio.tbr}</span>
-        <span>{audio.ext}</span>
-        <span>{mediaDisplayHelperService.getAudioQualityLabel(audio.tbr)}</span>
-        <span>{mediaDisplayHelperService.getSizeConverter(audio.filesize)}</span
+    <h1>Audio Format ay</h1>
+    {#each audios as audio, i}
+      <div class="formats">
+        <button
+          class="format-row"
+          class:selected={selectedFormatId === audio.format_id.toString()}
+          onclick={(e) => handleSelectedId(audio.format_id.toString())}
         >
+          <span>{audio.tbr}</span>
+          <span>{audio.ext}</span>
+          <span
+            >{mediaDisplayHelperService.getAudioQualityLabel(audio.tbr)}</span
+          >
+          <span
+            >{mediaDisplayHelperService.getSizeConverter(audio.filesize)}</span
+          >
+        </button>
       </div>
-    </div>
-  {/each}
-
-  <!-- <div class="formats">
-    <div class="format-row">
-      <span>4K</span>
-      <span>MP4 · AV1</span>
-      <span>25 FPS</span>
-      <span>5.6 GB</span>
-    </div>
-
-    <div class="format-row">
-      <span>1080p</span>
-      <span>MP4 · H.264</span>
-      <span>30 FPS</span>
-      <span>1.2 GB</span>
-    </div>
-  </div> -->
+    {/each}
+  </div>
 </section>
 
 <style>
   section {
     border: 1px solid white;
 
-    > .formats {
-      display: grid;
-      gap: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    > div {
+      overflow-y: auto; /* This is where the scrollbar should live */
+      padding: 0.5rem;
 
-      > .format-row {
+      > .formats {
         display: grid;
-        grid-template-columns: 6ch 1fr 6ch 6ch;
-        align-items: center;
-        padding: 0.5rem 0.75rem;
-        border-radius: 6px;
+        gap: 0.25rem;
+        color: var(--text-l1);
+        width: 100%;
 
-        > span {
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          font-size: var(--fontSize-md);
-        }
+        > .format-row {
+          display: grid;
+          grid-template-columns: 6ch 1fr 6ch 6ch;
+          align-items: center;
+          padding: 0.5rem 0.75rem;
+          border-radius: 6px;
 
-        &:hover {
-          background: rgba(255, 255, 255, 0.05);
-          cursor: pointer;
+          > span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: var(--fontSize-md);
+            color: var(--text-l2);
+          }
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+          }
+
+          &.selected {
+            border-color: #fbbf24; /* yellow-400 */
+            background: rgba(251, 191, 36, 0.1);
+          }
         }
       }
     }
