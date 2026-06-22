@@ -1,0 +1,11 @@
+{
+  "enabledCssSnippets": [
+    "code-blocks",
+    "headers"
+  ],
+  "theme": "obsidian",
+  "accentColor": "#d2fbb6",
+  "cssTheme": "",
+  "interfaceFontFamily": "",
+  "textFontFamily": "JetBrainsMonoNL Nerd Font Propo"
+}

@@ -1,0 +1,57 @@
+Absolutely — we can abstract this conceptually, so you internalize what’s happening rather than just copying code. Let’s break it down step by step, focusing on the pattern and the flow, not the exact Rust syntax.
+
+1. Goal
+  You have JSON data from yt-dlp and you want to create a typed Media instance.
+  You want typed fields (id, title, etc.)
+  You want error handling if something is missing or malformed
+  You want it all wrapped in a reusable method
+
+2. Conceptual Steps
+  Think of from_yt_dlp(json) like a factory method:
+  Parse the JSON → convert raw string into a “generic map” or Value object.
+  This is like JSON.parse(json) in JS.
+  If parsing fails → return a ParseError.
+  Validate required fields → check that keys like "id" and "title" exist.
+  If a field is missing → return a MissingField error.
+  This is like TS:
+  if (!json.id) throw new Error("id missing");
+
+  Optional fields → check if they exist, if not, provide default values ("" or None).
+  This is similar to optional chaining in TS: json.description ?? null.
+  Map fields into your typed struct → create a Media instance.
+  Assign values directly to the struct fields.
+  Optional fields are wrapped in Option in Rust.
+  Return the instance or error → this is wrapped in a Result<Media, DomainError>.
+  Like TS: try { return media } catch(e) { throw new DomainError(e) }
+
+3. Mental Model Diagram
+  raw JSON string (from yt-dlp)
+            │
+            ▼
+    parse JSON → Generic map (serde_json::Value)
+            │
+            ▼
+  validate required fields ──> if missing → DomainError::MissingField
+            │
+            ▼
+  map optional fields ───────> default values / None
+            │
+            ▼
+  construct Media struct ────> Media { id, title, thumbnail, ... }
+            │
+            ▼
+  return Result<Media, DomainError>
+
+4. Key Patterns to Internalize
+  Parsing + Validation + Mapping is a universal factory pattern for converting “raw data → typed domain object”.
+  Errors are explicit in Rust → Result<T, E> instead of exceptions.
+  Optional fields use Option<T> → explicit nullability.
+  Method lives in impl Media → the struct itself is just data, impl is where you attach behavior.
+
+5. How It Relates to TS / NestJS
+  Concept	Rust Pattern	TS/NestJS Analogy
+  JSON parsing	serde_json::from_str	JSON.parse
+  Validation	`ok_or_else(	
+  Optional fields	Option<T>	field ?? null
+  Errors	Result<T, DomainError>	throw new DomainError(...)
+  Factory method	impl Media { fn from_yt_dlp(...) -> Result }	static fromJson(...)
